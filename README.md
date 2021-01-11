@@ -2,7 +2,7 @@
 # YOLO-Coco-Dataset-Custom-Classes-Extractor
 
 - Download specific classes from the **Coco Dataset** for custrom object detection needs.
-- Support to download multiple classes at the same time (Multi-threaded).
+- Download multiple classes at the same time (Multi-threaded).
 
 ## Packages Required
 **1. pycocotools**
