@@ -23,4 +23,4 @@
 
 Test your downloaded images and the bounding boxes with **[  labelImg](https://github.com/tzutalin/labelImg)**.
 
-## Happy Detecting!
+### Happy Detecting!
