@@ -4,6 +4,7 @@
 
 - Download specific classes from the **Coco Dataset** for custrom object detection needs.
 - Download multiple classes at the same time (Multi-threaded).
+- Specify the number of classes you want to download
 - Pickup where you left off if your connection is interrupted.
 
 ## Packages Required
@@ -20,6 +21,8 @@
 `python coco-extractor.py "person"`
 #### 5. Download multiple classes:  
 `python coco-extractor.py "person" "sports ball" "zebra"`
+#### 6. Download a fix number of instances:
+`python coco-extractor.py "person" -number 100` 
 
 Test your downloaded images and the bounding boxes with **[  labelImg](https://github.com/tzutalin/labelImg)**.
 
