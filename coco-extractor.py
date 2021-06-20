@@ -11,15 +11,27 @@ def makeDirectory(dirName):
     except:
         pass
 
-def getImagesFromClassName(className):
+def getImagesFromClassName(className, image_number = 0):
     makeDirectory(f'downloaded_images/{className}')
     catIds = coco.getCatIds(catNms=[className])
     imgIds = coco.getImgIds(catIds=catIds )
     images = coco.loadImgs(imgIds)
 
+    if image_number != 0:
+        count_images = True
+        counter = 0
+    else:
+        count_images = False
+
     print(f"Total Images: {len(images)} for class '{className}'")
 
     for im in images:
+        if count_images:
+            if counter >= image_number:
+                print("Downloaded " + str(counter) + " images from " + className)
+                break
+            counter += 1
+
         image_file_name = im['file_name']
         label_file_name = im['file_name'].split('.')[0] + '.txt'
 
@@ -54,10 +66,18 @@ def getImagesFromClassName(className):
 
 argumentList = sys.argv
 
-classes = argumentList[1:]
+specify_number = argumentList[-2]
+check_number = False
+
+# check if flag is specified
+if specify_number == "-number":
+    check_number = True
+    classes_number = argumentList[-1]
+    classes = argumentList[1:-2]
+else:
+    classes = argumentList[1:]
 
 classes = [class_name.lower() for class_name in classes] # Converting to lower case
-
 
 if(classes[0] == "--help"):
     with open('classes.txt', 'r') as fp:
@@ -68,11 +88,15 @@ if(classes[0] == "--help"):
 
 print("\nClasses to download: ", classes, end = "\n\n")
 
+if check_number:
+    print("Downloading " + classes_number + " images from each class")
+
 makeDirectory('downloaded_images')
 
 coco = COCO('instances_train2017.json')
 cats = coco.loadCats(coco.getCatIds())
 nms=[cat['name'] for cat in cats]
+
 
 for name in classes:
     if(name not in nms):
@@ -83,8 +107,12 @@ threads = []
 
 # Creating threads for every class provided.
 for i in range(len(classes)):
-    t = threading.Thread(target=getImagesFromClassName, args=(classes[i],)) 
-    threads.append(t)
+    if check_number:
+        t = threading.Thread(target=getImagesFromClassName, args=(classes[i],int(classes_number),)) 
+        threads.append(t)
+    else:
+        t = threading.Thread(target=getImagesFromClassName, args=(classes[i],)) 
+        threads.append(t)
     
 for t in threads:
     t.start()
